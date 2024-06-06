@@ -26,7 +26,7 @@ pipeline {
                 script {
                     // Calculando a diferença em horas entre as horas desejada e atual
                     def desiredTimestamp = $DESIRED_HOUR
-                    def currentTimestamp = $CURRENT_HOU\" +\"%s\"", returnStdout: true).trim()
+                    def currentTimestamp = $CURRENT_CURRENT_HOUR
                     def timeDiff = (currentTimestamp.toInteger() - desiredTimestamp.toInteger()) / 3600
 
                     // Verificando se a diferença é maior que MAX_HOURS_DIFF
