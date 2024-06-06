@@ -14,10 +14,10 @@ pipeline {
         stage('Set Current Time') {
             steps {
                 script {
-                    // Obtendo a hora atual e definindo-a na variável CURRENT_HOUR
-                    CURRENT_HOUR = (script: 'date "+%H:%M"', returnStdout: true).trim()
-                    echo "Current hour: ${CURRENT_HOUR}"
-                }
+                            // Obtendo a hora atual e definindo-a na variável CURRENT_HOUR
+                            CURRENT_HOUR = sh(script: 'date "+%H:%M"', returnStdout: true).trim()
+                            echo "Current hour: ${CURRENT_HOUR}"
+                        }
             }
         }
 
