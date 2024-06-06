@@ -2,9 +2,11 @@ pipeline {
     agent any
 
     environment {
-
+        // Definindo a hora específica desejada (3h da manhã)
         DESIRED_HOUR = '03:00'
+        // Obtendo a hora atual da execução do job
         CURRENT_HOUR = ''
+        // Definindo a diferença máxima em horas entre as duas horas (24 horas)
         MAX_HOURS_DIFF = 24
     }
 
@@ -12,6 +14,7 @@ pipeline {
         stage('Set Current Time') {
             steps {
                 script {
+                    // Obtendo a hora atual e definindo-a na variável CURRENT_HOUR
                     CURRENT_HOUR = sh(script: 'date "+%H:%M"', returnStdout: true).trim()
                     echo "Current hour: ${CURRENT_HOUR}"
                 }
@@ -21,20 +24,22 @@ pipeline {
         stage('Check Time Difference') {
             steps {
                 script {
-                    def timeDiff = sh(script: "echo $(( (\$(date -d \"$DESIRED_HOUR\" +\"%s\") - \$(date -d \"$CURRENT_HOUR\" +\"%s\")) / 3600 ))", returnStdout: true).trim().toInteger()
+                    // Calculando a diferença em horas entre as horas desejada e atual
+                    def desiredTimestamp = sh(script: "date -d \"$DESIRED_HOUR\" +\"%s\"", returnStdout: true).trim()
+                    def currentTimestamp = sh(script: "date -d \"$CURRENT_HOUR\" +\"%s\"", returnStdout: true).trim()
+                    def timeDiff = (currentTimestamp.toInteger() - desiredTimestamp.toInteger()) / 3600
 
-
+                    // Verificando se a diferença é maior que MAX_HOURS_DIFF
                     if (timeDiff > MAX_HOURS_DIFF) {
                         // Realizar o pull request
                         echo "Time difference is greater than ${MAX_HOURS_DIFF} hours. Making pull request..."
-
-                         stage('Checkout') {
-                                    steps {
-                                        git branch: 'main', url: 'https://seu-repositorio.git'
-                                    }
-                                }
+                        stage('Checkout') {
+                                                            steps {
+                                                                git branch: 'main', url: 'https://seu-repositorio.git'
+                                                            }
+                                                        }
                     } else {
-
+                        // Não realizar o pull request
                         echo "Time difference is within ${MAX_HOURS_DIFF} hours. Skipping pull request."
                     }
                 }
@@ -51,3 +56,9 @@ pipeline {
         }
     }
 }
+
+stage('Checkout') {
+                                    steps {
+                                        git branch: 'main', url: 'https://seu-repositorio.git'
+                                    }
+                                }
