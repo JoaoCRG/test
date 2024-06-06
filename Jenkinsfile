@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Obtendo a hora atual e definindo-a na variável CURRENT_HOUR
-                    CURRENT_HOUR = sh(script: 'date "+%H:%M"', returnStdout: true).trim()
+                    CURRENT_HOUR = (script: 'date "+%H:%M"', returnStdout: true).trim()
                     echo "Current hour: ${CURRENT_HOUR}"
                 }
             }
@@ -25,8 +25,8 @@ pipeline {
             steps {
                 script {
                     // Calculando a diferença em horas entre as horas desejada e atual
-                    def desiredTimestamp = sh(script: "date -d \"$DESIRED_HOUR\" +\"%s\"", returnStdout: true).trim()
-                    def currentTimestamp = sh(script: "date -d \"$CURRENT_HOUR\" +\"%s\"", returnStdout: true).trim()
+                    def desiredTimestamp = $DESIRED_HOUR
+                    def currentTimestamp = $CURRENT_HOU\" +\"%s\"", returnStdout: true).trim()
                     def timeDiff = (currentTimestamp.toInteger() - desiredTimestamp.toInteger()) / 3600
 
                     // Verificando se a diferença é maior que MAX_HOURS_DIFF
@@ -35,11 +35,11 @@ pipeline {
                         echo "Time difference is greater than ${MAX_HOURS_DIFF} hours. Making pull request..."
                         stage('Checkout') {
                                                             steps {
-                                                                git branch: 'main', url: 'https://seu-repositorio.git'
+                                                                git branch: 'main', url: 'https://github.com/JoaoCRG/test'
                                                             }
                                                         }
                     } else {
-                        // Não realizar o pull request
+
                         echo "Time difference is within ${MAX_HOURS_DIFF} hours. Skipping pull request."
                     }
                 }
