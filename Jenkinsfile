@@ -16,7 +16,7 @@ pipeline {
                     } else {
                         env.BUILD_NUMBER = '1'
                     }
-                    echo "Current BUILD_NUMBER: ${env.BUILD_NUMBER}"
+                    echo "NUMERO ATUAL: ${env.BUILD_NUMBER}"
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
                     // Incrementar o BUILD_NUMBER
                     def newBuildNumber = (env.BUILD_NUMBER.toInteger() + 1).toString()
                     writeFile(file: 'buildNumber.txt', text: newBuildNumber)
-                    echo "New BUILD_NUMBER: ${newBuildNumber}"
+                    echo "NOVO NUMERO: ${newBuildNumber}"
                 }
             }
         }

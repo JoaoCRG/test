@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f7218ca1-22f4-4571-9efc-adf4ff75ad7d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +48,11 @@
   <component name="RebelAgentSelection">
     <selection>jr</selection>
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\joao.guimaraes\workspace\engineering\test" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -64,7 +70,7 @@
       <option name="presentableId" value="Default" />
       <updated>1673915989590</updated>
       <workItem from="1717663731944" duration="1309000" />
-      <workItem from="1717666104226" duration="2382000" />
+      <workItem from="1717666104226" duration="2799000" />
     </task>
     <servers />
   </component>
