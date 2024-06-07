@@ -2,50 +2,61 @@ pipeline {
     agent any
 
     environment {
-        // Definindo a hora específica desejada (3h da manhã)
-        DESIRED_HOUR = '03:00'
-        // Obtendo a hora atual da execução do job
+        // Definindo a hora específica desejada (4h da manhã)
+        DESIRED_HOUR = '04:00'
+        // Arquivo para armazenar a data da última execução que fez o pull request
+        LAST_PULL_FILE = 'last_pull_date.txt'
+        // Obtendo a data atual da execução do job
+        CURRENT_DATE = ''
+        // Definindo a hora atual da execução do job
         CURRENT_HOUR = ''
-        // Definindo a diferença máxima em horas entre as duas horas (24 horas)
-        MAX_HOURS_DIFF = 24
     }
 
     stages {
-        stage('Set Current Time') {
+        stage('Initialize') {
             steps {
                 script {
-                            // Obtendo a hora atual e definindo-a na variável CURRENT_HOUR
-                            CURRENT_HOUR = sh(script: 'date "+%H:%M"', returnStdout: true).trim()
-                            echo "Current hour: ${CURRENT_HOUR}"
-                        }
+                    // Obtendo a data e a hora atuais
+                    CURRENT_DATE = sh(script: 'date "+%Y-%m-%d"', returnStdout: true).trim()
+                    CURRENT_HOUR = sh(script: 'date "+%H:%M"', returnStdout: true).trim()
+                    echo "Current date: ${CURRENT_DATE}, Current hour: ${CURRENT_HOUR}"
+                }
             }
         }
 
-        stage('Check Time Difference') {
+        stage('Check Last Pull Date') {
             steps {
                 script {
-                    // Calculando a diferença em horas entre as horas desejada e atual
-                    def desiredTimestamp = $DESIRED_HOUR
-                    def currentTimestamp = $CURRENT_CURRENT_HOUR
-                    def timeDiff = (currentTimestamp.toInteger() - desiredTimestamp.toInteger()) / 3600
+                    // Lendo a data da última execução que fez o pull request
+                    def lastPullDate = ''
+                    if (fileExists(LAST_PULL_FILE)) {
+                        lastPullDate = readFile(LAST_PULL_FILE).trim()
+                    }
 
-                    // Verificando se a diferença é maior que MAX_HOURS_DIFF
-                    if (timeDiff > MAX_HOURS_DIFF) {
+                    echo "Last pull request date: ${lastPullDate}"
+
+                    // Verificando se a data atual é diferente da data da última execução que fez o pull request
+                    if (CURRENT_DATE != lastPullDate && CURRENT_HOUR >= DESIRED_HOUR) {
                         // Realizar o pull request
-                        echo "Time difference is greater than ${MAX_HOURS_DIFF} hours. Making pull request..."
-                        stage('Checkout') {
-                                                            steps {
-                                                                git branch: 'main', url: 'https://github.com/JoaoCRG/test'
-                                                            }
-                                                        }
-                    } else {
+                        echo "Making pull request..."
+                        // Coloque aqui os comandos para fazer o pull request
 
-                        echo "Time difference is within ${MAX_HOURS_DIFF} hours. Skipping pull request."
+                        // Atualizando a data da última execução que fez o pull request
+                        writeFile(file: LAST_PULL_FILE, text: CURRENT_DATE)
+                    } else {
+                        // Não realizar o pull request
+                        echo "Skipping pull request."
                     }
                 }
             }
         }
-    }
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/JoaoCRG/test'
+            }
+        }
+
 
     post {
         success {
@@ -56,9 +67,3 @@ pipeline {
         }
     }
 }
-
-stage('Checkout') {
-                                    steps {
-                                        git branch: 'main', url: 'https://seu-repositorio.git'
-                                    }
-                                }
